@@ -1,0 +1,35 @@
+{
+   "name": "sales-cloud-data-api",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "keywords": [
+      "typeorm",
+      "webapi",
+      "api",
+      "web",
+      "web api",
+      "typescript"
+   ],
+   "devDependencies": {
+      "@types/node": "^8.10.29",
+      "ts-node": "^3.3.0",
+      "typescript": "^2.9.2"
+   },
+   "dependencies": {
+      "@types/restify": "^7.2.5",
+      "body-parser": "^1.18.3",
+      "express": "^4.16.3",
+      "jsonwebtoken": "^8.3.0",
+      "jwt-decode": "^2.2.0",
+      "node-input-validator": "^2.3.1",
+      "nodemon": "^1.18.4",
+      "pg": "^7.4.3",
+      "reflect-metadata": "^0.1.10",
+      "restify": "^7.2.1",
+      "typeorm": "^0.2.7"
+   },
+   "main": "index.ts",
+   "scripts": {
+      "start": "nodemon --exec ts-node src/index.ts"
+   }
+}

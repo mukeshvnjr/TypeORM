@@ -1,0 +1,1099 @@
+{
+	"info": {
+		"_postman_id": "b7478d73-9984-4829-8bec-fd4d2ca4424e",
+		"name": "Sales-Data-Rest-API-Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Contact-API",
+			"item": [
+				{
+					"name": "Login To get Security Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c6e23f7f-3b3e-4fad-a635-a8296b41f4cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"jsonResponseData = JSON.parse(responseBody);",
+									"console.log(jsonResponseData.token);",
+									"pm.globals.set(\"vSecurityToken\", jsonResponseData.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "34a42458-0761-4559-854e-8c44a09098dd",
+								"exec": [
+									"pm.globals.unset(\"vSecurityToken\");",
+									"pm.environment.unset(\"vSalesForceId\");",
+									"pm.environment.unset(\"vAccountId\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n       \"username\": \"shashi\",\r\n       \"email\": \"ss@gmail.com\",\r\n       \"id\": \"1\"\r\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/login",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c3b03d07-1e67-46b9-bc6d-77ebd8620fe8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add A New Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7c244980-9806-4bdc-9d7a-6965768d68bb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    jsonResponseData = JSON.parse(responseBody);",
+									"    //pm.environment.set(\"vContactsId\", jsonResponseData.result.id);",
+									"    pm.globals.set(\"vContactsId\", jsonResponseData.result.id);",
+									"",
+									"    console.log(\"vContactsId: \" + pm.globals.get(\"vContactsId\"))",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9222d3fe-51ca-4d29-8fbe-be434ca2ad63",
+								"exec": [
+									"//uuid = require('uuid');",
+									"//pm.environment.set(\"vSalesForceId\", uuid.v4());",
+									"//randomString = require(\"randomString\")",
+									"pm.environment.set(\"vSalesForceId\", \"sfid-\" + Math.floor(Math.random() * 100000));",
+									"console.log(\"vSalesForceId: \" + pm.environment.get(\"vSalesForceId\"))",
+									"",
+									"//jsonRequestData = JSON.parse(requestBody);",
+									"//console.log(jsonRequestData.token);",
+									"//jsonRequestData.sfid = pm.environment.get(\"vSalesForceId\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emailbouncedreason\": null,\n    \"mailingstate\": null,\n    \"accountid\": null,\n    \"assistantname\": null,\n    \"name\": \"Mukesh\",\n    \"mobilephone\": null,\n    \"birthdate\": \"01-06-1992\",\n    \"phone\": \"1-800-667-6389\",\n    \"mailingstreet\": null,\n    \"emailbounceddate\": null,\n    \"isdeleted\": false,\n    \"homephone\": null,\n    \"assistantphone\": null,\n    \"systemmodstamp\": \"2018-09-12T00:37:21.000Z\",\n    \"department\": null,\n    \"createddate\": \"2018-09-12T00:37:21.000Z\",\n    \"salutation\": null,\n    \"title\": \"Test\",\n    \"createdbyid\": \"0050b000004wkDGAAY\",\n    \"firstname\": \"Vanjara\",\n    \"email\": \"test@mailinator.com\",\n    \"description\": null,\n    \"fax\": null,\n    \"sfid\": \"{{vSalesForceId}}\",\n    \"_hc_lastop\": \"PENDING\",\n    \"_hc_err\": null\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Newly Added Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3aae2676-d01e-4314-b27c-4fb796fa5f94",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5d36b44f-f57f-414d-8f9b-a6e05c8f0454",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts/{{vContactsId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts",
+								"{{vContactsId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a1f7fb-d73e-4ef8-9528-7c362ead91c3",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "433abf5c-6ffc-4c26-9cfa-a4f2d376ed2c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emailbouncedreason\": null,\n    \"mailingstate\": null,\n    \"accountid\": null,\n    \"assistantname\": null,\n    \"name\": \"Mukesh\",\n    \"mobilephone\": null,\n    \"birthdate\": \"01-06-1992\",\n    \"phone\": \"1-800-667-6389\",\n    \"mailingstreet\": null,\n    \"emailbounceddate\": null,\n    \"isdeleted\": false,\n    \"homephone\": null,\n    \"assistantphone\": null,\n    \"systemmodstamp\": \"2018-09-12T00:37:21.000Z\",\n    \"department\": null,\n    \"createddate\": \"2018-09-12T00:37:21.000Z\",\n    \"salutation\": null,\n    \"title\": \"Test\",\n    \"createdbyid\": \"0050b000004wkDGAAY\",\n    \"firstname\": \"Vanjara\",\n    \"email\": \"test@mailinator.com\",\n    \"description\": null,\n    \"fax\": null,\n    \"sfid\": \"{{vSalesForceId}}\",\n    \"_hc_lastop\": \"PENDING\",\n    \"_hc_err\": null\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts/{{vContactsId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts",
+								"{{vContactsId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Updates Made to Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1c67ea4a-2723-4f8c-a3fe-3d52fdc9ee94",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c116e4c0-5cc1-43cf-a459-6e7dd86a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts/{{vContactsId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts",
+								"{{vContactsId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9f7c8ba3-5f98-4aec-bbc6-d04ab95fcf70",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    jsonResponseData = JSON.parse(responseBody);",
+									"    pm.expect(jsonResponseData.id).to.eql(pm.environment.get(\"vContactsId\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "00450c19-2333-42df-8867-891d2a28c7cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts/{{vContactsId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts",
+								"{{vContactsId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Deleted Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1c6f0f2-a688-464f-a7a3-f9b1c30e6ed0",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6bddee8c-0745-4c87-bf56-50fa763e5804",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/contacts/{{vContactsId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"contacts",
+								"{{vContactsId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Login To get Security Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c6e23f7f-3b3e-4fad-a635-a8296b41f4cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"jsonResponseData = JSON.parse(responseBody);",
+									"console.log(jsonResponseData.token);",
+									"pm.globals.set(\"vSecurityToken\", jsonResponseData.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "34a42458-0761-4559-854e-8c44a09098dd",
+								"exec": [
+									"pm.globals.unset(\"vSecurityToken\");",
+									"pm.environment.unset(\"vSalesForceId\");",
+									"pm.environment.unset(\"vAccountId\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n       \"username\": \"shashi\",\r\n       \"email\": \"ss@gmail.com\",\r\n       \"id\": \"1\"\r\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/login",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c3b03d07-1e67-46b9-bc6d-77ebd8620fe8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Accounts By Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c3b03d07-1e67-46b9-bc6d-77ebd8620fe8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2178c4a9-f375-45bb-851f-9e12d034471e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"page\": \"1\",\n\t\"size\": \"5\",\n\t\"fieldlist\": \"accounts.id accounts.name accounts.phone accounts.industry\",\n\t\"filter\" : {\n\t\t\"wherecondition\": [\"\", \"AND\"],\n\t\t\"wherefilter\": [\"accounts.id IS NOT NULL\", \"accounts.name IS NOT NULL\"],\n\t\t\"groupfilter\": [],\n\t\t\"havecondition\": [],\n\t\t\"havefilter\": [],\n\t\t\"ordercondition\": [\"ASC\", \"DESC\", \"DESC\"],\n\t\t\"orderfilter\": [\"accounts.id\", \"accounts.industry\", \"accounts.phone\"]\n\t\t\n\t}\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/page/",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"page",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add A New Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d267338d-4e4c-4df7-b5ef-1d1254d93268",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    jsonResponseData = JSON.parse(responseBody);",
+									"    //pm.environment.set(\"vAccountId\", jsonResponseData.result.id);",
+									"    pm.globals.set(\"vAccountId\", jsonResponseData.result.id);",
+									"",
+									"    console.log(\"vAccountId: \" + pm.globals.get(\"vAccountId\"))",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d3167a2f-6c67-4982-9447-0625d7661062",
+								"exec": [
+									"//uuid = require('uuid');",
+									"//pm.environment.set(\"vSalesForceId\", uuid.v4());",
+									"//randomString = require(\"randomString\")",
+									"pm.environment.set(\"vSalesForceId\", \"sfid-\" + Math.floor(Math.random() * 100000));",
+									"console.log(\"vSalesForceId: \" + pm.environment.get(\"vSalesForceId\"))",
+									"",
+									"//jsonRequestData = JSON.parse(requestBody);",
+									"//console.log(jsonRequestData.token);",
+									"//jsonRequestData.sfid = pm.environment.get(\"vSalesForceId\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"name 1\",\r\n    \"phone\": \"1-800-667-6389\",\r\n    \"shippinglongitude\": null,\r\n    \"shippingstate\": null,\r\n    \"shippingpostalcode\": null,\r\n    \"billingcity\": null,\r\n    \"billinglatitude\": null,\r\n    \"accountsource\": null,\r\n    \"shippingcountry\": null,\r\n    \"shippinggeocodeaccuracy\": null,\r\n    \"lastmodifieddate\": \"2018-09-12T00:37:21.000Z\",\r\n    \"isdeleted\": false,\r\n    \"systemmodstamp\": \"2018-09-12T00:37:21.000Z\",\r\n    \"lastmodifiedbyid\": \"0050b000004wkDGAAY\",\r\n    \"shippingstreet\": null,\r\n    \"billingpostalcode\": null,\r\n    \"billinglongitude\": null,\r\n    \"createddate\": \"2018-09-12T00:37:21.000Z\",\r\n    \"billingstate\": \"West Virginia\",\r\n    \"shippingcity\": null,\r\n    \"shippinglatitude\": null,\r\n    \"type\": \"Prospect\",\r\n    \"billingcountry\": null,\r\n    \"description\": null,\r\n    \"billinggeocodeaccuracy\": null,\r\n    \"fax\": null,\r\n    \"sicdesc\": null,\r\n    \"billingstreet\": null,\r\n    \"sfid\": \"{{vSalesForceId}}\",\r\n    \"_hc_lastop\": null,\r\n    \"_hc_err\": null,\r\n    \"numberofemployees\": 400,\r\n    \"parentid\": null,\r\n    \"masterrecordid\": null,\r\n    \"ownerid\": \"0050b000004wkDGAAY\",\r\n    \"lastactivitydate\": null,\r\n    \"createdbyid\": \"0050b000004wkDGAAY\",\r\n    \"website\": null,\r\n    \"photourl\": \"/services/images/photo/0010b00002Dbi5YAAR\",\r\n    \"industry\": null\r\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Newly Added Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3aae2676-d01e-4314-b27c-4fb796fa5f94",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5d36b44f-f57f-414d-8f9b-a6e05c8f0454",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/{{vAccountId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"{{vAccountId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Account Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a1f7fb-d73e-4ef8-9528-7c362ead91c3",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"name 1\",\n    \"phone\": \"1-800-667-6389\",\n    \"shippinglongitude\": null,\n    \"shippingstate\": null,\n    \"shippingpostalcode\": null,\n    \"billingcity\": null,\n    \"billinglatitude\": null,\n    \"accountsource\": null,\n    \"shippingcountry\": null,\n    \"shippinggeocodeaccuracy\": null,\n    \"lastmodifieddate\": \"2018-09-12T00:37:21.000Z\",\n    \"isdeleted\": false,\n    \"systemmodstamp\": \"2018-09-12T00:37:21.000Z\",\n    \"lastmodifiedbyid\": \"0050b000004wkDGAAY\",\n    \"shippingstreet\": null,\n    \"billingpostalcode\": null,\n    \"billinglongitude\": null,\n    \"createddate\": \"2018-09-12T00:37:21.000Z\",\n    \"billingstate\": \"West Virginia\",\n    \"shippingcity\": null,\n    \"shippinglatitude\": null,\n    \"type\": \"Prospect\",\n    \"billingcountry\": null,\n    \"description\": null,\n    \"billinggeocodeaccuracy\": null,\n    \"fax\": null,\n    \"sicdesc\": null,\n    \"billingstreet\": null,\n    \"sfid\": \"{{vSalesForceId}}\",\n    \"_hc_lastop\": null,\n    \"_hc_err\": null,\n    \"numberofemployees\": 400,\n    \"parentid\": null,\n    \"masterrecordid\": null,\n    \"ownerid\": \"0050b000004wkDGAAY\",\n    \"lastactivitydate\": null,\n    \"createdbyid\": \"0050b000004wkDGAAY\",\n    \"website\": null,\n    \"photourl\": \"/services/images/photo/0010b00002Dbi5YAAR\",\n    \"industry\": null\n}"
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/{{vAccountId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"{{vAccountId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Updates Made to Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1c67ea4a-2723-4f8c-a3fe-3d52fdc9ee94",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c116e4c0-5cc1-43cf-a459-6e7dd86a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/{{vAccountId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"{{vAccountId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "760de289-4a1a-4d03-8553-f1ecc83c2cbb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    jsonResponseData = JSON.parse(responseBody);",
+									"    pm.expect(jsonResponseData.id).to.eql(pm.environment.get(\"vAccountId\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "00450c19-2333-42df-8867-891d2a28c7cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/{{vAccountId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"{{vAccountId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Deleted Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "80f25006-163d-4c41-afe5-8c0fbdec987e",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "dfeb731d-ac22-4ae0-9849-1496c4133eb2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{vSecurityToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{EndpointUrlPrefix}}/accounts/{{vAccountId}}",
+							"host": [
+								"{{EndpointUrlPrefix}}"
+							],
+							"path": [
+								"accounts",
+								"{{vAccountId}}"
+							]
+						},
+						"description": "Get Acccount By ID"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "023d3951-05d6-4a9f-bac5-dd87a8e3c1bd",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cd1c9f81-9589-493e-a8e2-0f0dc8c52ee9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
